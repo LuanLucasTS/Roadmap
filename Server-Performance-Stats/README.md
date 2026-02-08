@@ -1,52 +1,52 @@
-# Server Performance Statistics Monitor
 
-A Bash script to analyze basic server performance stats on Linux servers.
+# Monitor de Estatísticas de Performance de Servidor 🚀
 
-Project Page: [roadmap.sh/projects/server-stats](https://roadmap.sh/projects/server-stats)
+Um script em **Bash** para analisar estatísticas básicas de performance de servidores Linux.
 
-## Features
+🔗 Página do projeto: https://roadmap.sh/projects/server-stats
 
-The script provides the following information:
+## ✨ Funcionalidades
 
-- **CPU Usage**: Shows the total CPU usage percentage.
-- **Memory Usage**: Displays free vs. used memory, including usage percentage.
-- **Disk Usage**: Shows free vs. used disk space for each filesystem.
-- **Top Processes**: Lists the top 5 processes by CPU and memory usage.
-- **Additional Information**: 
-  - OS version
-  - System uptime
+O script fornece as seguintes informações:
+
+- 🧠 **Uso de CPU**: Mostra a porcentagem total de uso da CPU.
+- 💾 **Uso de Memória**: Exibe memória livre vs. utilizada, incluindo porcentagem.
+- 💽 **Uso de Disco**: Mostra espaço livre vs. utilizado para cada filesystem.
+- 🔝 **Processos Principais**: Lista os 5 principais processos por uso de CPU e memória.
+- 📊 **Informações Adicionais**:
+  - Versão do sistema operacional
+  - Tempo de atividade do sistema (uptime)
   - Load average
-  - Logged in users
-  - Recent failed login attempts (if available)
+  - Usuários logados
+  - Tentativas recentes de login malsucedidas (se disponível)
 
-## Requirements
+## 🛠️ Requisitos
 
-- Linux operating system
-- Bash shell
-- Standard Linux utilities (`ps`, `free`, `df`, etc.)
-- Optional: `mpstat` for more accurate CPU usage (part of the `sysstat` package)
+- Sistema operacional Linux
+- Shell Bash
+- Utilitários padrão do Linux (`ps`, `free`, `df`, etc.)
+- Opcional: `mpstat` para maior precisão no uso de CPU (pacote `sysstat`)
 
-## Installation
+## 📦 Instalação
 
-1. Download the script:
-   ```
-   wget https://raw.githubusercontent.com/LuanLucasTS/Server-Performance-Stats/main/server-stats.sh
-   ```
-   
-2. Make the script executable:
-   ```
-   chmod +x server-stats.sh
-   ```
+1. Baixe o script:
+```
+wget https://raw.githubusercontent.com/LuanLucasTS/Server-Performance-Stats/main/server-stats.sh
+```
 
-## Usage
+2. Torne o script executável:
+```
+chmod +x server-stats.sh
+```
 
-Run the script with:
+## ▶️ Uso
 
+Execute o script com:
 ```
 ./server-stats.sh
 ```
 
-## Sample Output
+## 🧪 Exemplo de Saída
 
 ```
 Server Performance Stats
@@ -96,14 +96,16 @@ root         807  0.3  0.5 591292 19616 ?        Ssl  05:56   0:01 /usr/sbin/Net
 Oct 21 03:25:18 myserver sshd[12346]: Failed password for invalid user admin from 192.168.1.100 port 58425 ssh2
 ```
 
-## Notes for Windows Users
 
-This script is designed for Linux systems. If you're using Windows, you can:
+## 🪟 Observações para Usuários Windows
 
-1. Use the script on a Linux virtual machine
-2. Use Windows Subsystem for Linux (WSL)
-3. Use Git Bash or similar Unix-like environment for Windows
+Este script foi desenvolvido para sistemas Linux. Se você estiver usando Windows, pode:
 
-## License
+1. Executar em uma máquina virtual Linux
+2. Utilizar o Windows Subsystem for Linux (WSL)
+3. Usar Git Bash ou ambiente Unix-like semelhante
 
-This script is provided under the MIT License. Feel free to modify and distribute as needed. 
+## 📄 Licença
+
+Este projeto está licenciado sob a **Licença MIT**.  
+Sinta-se à vontade para modificar e distribuir conforme necessário.
