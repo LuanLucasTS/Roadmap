@@ -6,22 +6,22 @@ echo "Server Performance Stats"
 echo "------------------------"
 
 # OS Version
-echo "OS Version:"
+echo "Versão do Sistema Operacional:"
 uname -a
 echo ""
 
 # Uptime and Load Average
-echo "Uptime and Load Average:"
+echo "Tempo de atividade e média de carga:"
 uptime
 echo ""
 
 # Logged in Users
-echo "Logged in Users:"
+echo "Usuários logados:"
 who
 echo ""
 
 # Failed Login Attempts (assuming common log location; may vary by distro)
-echo "Recent Failed Login Attempts:"
+echo "Falhas recentes de login:"
 if [ -f /var/log/auth.log ]; then
     grep "Failed password" /var/log/auth.log | tail -n 10
 elif [ -f /var/log/secure ]; then
@@ -32,14 +32,14 @@ fi
 echo ""
 
 # Total CPU Usage
-echo "Total CPU Usage:"
+echo "Uso total de CPU:"
 cpu_idle=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print $1}')
 cpu_usage=$(echo "100 - $cpu_idle" | bc)
 echo "CPU Usage: $cpu_usage%"
 echo ""
 
 # Total Memory Usage
-echo "Total Memory Usage:"
+echo "Uso total de memória:"
 free_output=$(free -m)
 total_mem=$(echo "$free_output" | grep Mem: | awk '{print $2}')
 used_mem=$(echo "$free_output" | grep Mem: | awk '{print $3}')
@@ -51,7 +51,7 @@ echo "Free: ${free_mem}MB"
 echo ""
 
 # Total Disk Usage (for all filesystems)
-echo "Total Disk Usage:"
+echo "Uso total de disco:"
 df_output=$(df -m --total | tail -1)
 total_disk=$(echo "$df_output" | awk '{print $2}')
 used_disk=$(echo "$df_output" | awk '{print $3}')
@@ -63,11 +63,11 @@ echo "Free: ${free_disk}MB"
 echo ""
 
 # Top 5 Processes by CPU Usage
-echo "Top 5 Processes by CPU Usage:"
+echo "Os 5 processos mais utilizados pela CPU:"
 ps aux --sort=-%cpu | head -n 6
 echo ""
 
 # Top 5 Processes by Memory Usage
-echo "Top 5 Processes by Memory Usage:"
+echo "Os 5 processos mais utilizados por memória:"
 ps aux --sort=-%mem | head -n 6
 echo ""
