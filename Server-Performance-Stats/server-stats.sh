@@ -1,73 +1,90 @@
 #!/bin/bash
 
-# Script to analyze basic server performance stats
+echo "📊 Estatísticas do Servidor"
+echo "=========================="
 
-echo "Estatísticas de desempenho do servidor"
-echo "------------------------"
-
-# OS Version
-echo "Versão do Sistema Operacional:"
-uname -a
+# Sistema
+echo "🖥️ Sistema:"
+echo "Hostname: $(hostname)"
+echo "SO: $(grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '"')"
+echo "Kernel: $(uname -r)"
+echo "Arquitetura: $(uname -m)"
+echo "Data/Hora: $(date)"
 echo ""
 
-# Uptime and Load Average
-echo "Tempo de atividade e média de carga:"
-uptime
+# Virtualização
+echo "🔍 Virtualização:"
+virt=$(systemd-detect-virt 2>/dev/null)
+[ -z "$virt" ] && virt="Não detectado"
+echo "Tipo: $virt"
 echo ""
 
-# Logged in Users
-echo "Usuários logados:"
-who
+# Uptime e Load
+echo "⏱️ Uptime e Load:"
+uptime -p
+cat /proc/loadavg | awk '{print "Load (1/5/15):", $1, $2, $3}'
 echo ""
 
-# Failed Login Attempts (assuming common log location; may vary by distro)
-echo "Falhas recentes de login:"
-if [ -f /var/log/auth.log ]; then
-    grep "Failed password" /var/log/auth.log | tail -n 10
-elif [ -f /var/log/secure ]; then
-    grep "Failed password" /var/log/secure | tail -n 10
-else
-    echo "Log file not found (/var/log/auth.log or /var/log/secure)"
-fi
+# CPU
+echo "🧠 CPU:"
+lscpu | grep -E "Model name|CPU\(s\)|Core"
+top -bn1 | grep "Cpu(s)"
 echo ""
 
-# Total CPU Usage
-echo "Uso total de CPU:"
-cpu_idle=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print $1}')
-cpu_usage=$(echo "100 - $cpu_idle" | bc)
-echo "CPU Usage: $cpu_usage%"
+# Memória
+echo "💾 Memória:"
+free -h
 echo ""
 
-# Total Memory Usage
-echo "Uso total de memória:"
-free_output=$(free -m)
-total_mem=$(echo "$free_output" | grep Mem: | awk '{print $2}')
-used_mem=$(echo "$free_output" | grep Mem: | awk '{print $3}')
-free_mem=$(echo "$free_output" | grep Mem: | awk '{print $4}')
-mem_percent=$(echo "scale=2; ($used_mem / $total_mem) * 100" | bc)
-echo "Total: ${total_mem}MB"
-echo "Used: ${used_mem}MB (${mem_percent}%)"
-echo "Free: ${free_mem}MB"
+# Swap
+echo "🔁 Swap:"
+swapon --show || echo "Swap não configurada"
 echo ""
 
-# Total Disk Usage (for all filesystems)
-echo "Uso total de disco:"
-df_output=$(df -m --total | tail -1)
-total_disk=$(echo "$df_output" | awk '{print $2}')
-used_disk=$(echo "$df_output" | awk '{print $3}')
-free_disk=$(echo "$df_output" | awk '{print $4}')
-disk_percent=$(echo "$df_output" | awk '{print $5}' | sed 's/%//')
-echo "Total: ${total_disk}MB"
-echo "Used: ${used_disk}MB (${disk_percent}%)"
-echo "Free: ${free_disk}MB"
+# Disco
+echo "📀 Uso de disco:"
+df -h --output=source,size,used,avail,pcent,target | column -t
 echo ""
 
-# Top 5 Processes by CPU Usage
-echo "Os 5 processos mais utilizados pela CPU:"
-ps aux --sort=-%cpu | head -n 6
+echo "📦 Inodes:"
+df -ih | column -t
 echo ""
 
-# Top 5 Processes by Memory Usage
-echo "Os 5 processos mais utilizados por memória:"
-ps aux --sort=-%mem | head -n 6
+# Filesystems críticos
+echo "⚠️ Partições acima de 80%:"
+df -h | awk '$5+0 > 80 {print $0}'
 echo ""
+
+# IO básico
+echo "📈 IO (iowait):"
+top -bn1 | grep "Cpu(s)" | sed 's/,/\n/g' | grep wa
+echo ""
+
+# Rede
+echo "🌐 Rede:"
+ip -brief addr show
+echo ""
+
+echo "📡 Conexões TCP ativas:"
+ss -tunap | wc -l
+echo ""
+
+# Processos
+echo "🔥 Top 5 CPU:"
+ps -eo pid,comm,%cpu,%mem --sort=-%cpu | head -n 6
+echo ""
+
+echo "🐘 Top 5 Memória:"
+ps -eo pid,comm,%mem,%cpu --sort=-%mem | head -n 6
+echo ""
+
+# Segurança
+echo "🔐 Últimos logins:"
+last -n 5
+echo ""
+
+echo "🚪 Portas escutando:"
+ss -tulnp | head -n 10
+echo ""
+
+echo "✅ Fim do relatório"
